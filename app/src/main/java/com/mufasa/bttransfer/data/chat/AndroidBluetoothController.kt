@@ -1,14 +1,14 @@
 package com.mufasa.bttransfer.data.chat
 
+import android.Manifest
 import android.annotation.SuppressLint
 import android.bluetooth.BluetoothManager
 import android.content.Context
+import android.content.IntentFilter
 import android.content.pm.PackageManager
 import android.os.Build
 import androidx.annotation.RequiresApi
-import com.mufasa.bttransfer.Manifest
 import com.mufasa.bttransfer.domain.chat.BluetoothController
-import com.mufasa.bttransfer.domain.chat.BluetoothDevice
 import com.mufasa.bttransfer.domain.chat.BluetoothDeviceDomain
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -36,6 +36,13 @@ class AndroidBluetoothController(
     override val pairedDevices: StateFlow<List<BluetoothDeviceDomain>>
         get() = _pairedDevices.asStateFlow()
 
+    private val foundDeviceReceiver = FoundDeviceReceiver {device ->
+        _scannedDevices.update {devices ->
+            val newDevice = device.toBluetoothDeviceDomain()
+            if (newDevice in devices) devices else devices + newDevice
+        }
+    }
+
     init {
         updatePairedDevices()
     }
@@ -45,17 +52,26 @@ class AndroidBluetoothController(
             return
         }
 
+        context.registerReceiver(
+            foundDeviceReceiver,
+            IntentFilter(android.bluetooth.BluetoothDevice.ACTION_FOUND)
+        )
+
         updatePairedDevices()
 
         bluetoothAdapter?.startDiscovery()
     }
 
     override fun stopDiscovery() {
-        TODO("Not yet implemented")
+        if (!hasPermission(Manifest.permission.BLUETOOTH_SCAN)) {
+            return
+        }
+
+        bluetoothAdapter?.cancelDiscovery()
     }
 
     override fun release() {
-        TODO("Not yet implemented")
+        context.unregisterReceiver(foundDeviceReceiver)
     }
 
     private fun updatePairedDevices() {
