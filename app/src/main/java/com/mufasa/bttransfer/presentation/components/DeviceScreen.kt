@@ -29,7 +29,7 @@ fun DeviceScreen(
         modifier = Modifier
             .fillMaxSize()
     ) {
-
+        BluetoothDeviceList(state.pairedDevices, state.scannedDevices, {}, Modifier.fillMaxWidth().weight(1f))
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceAround

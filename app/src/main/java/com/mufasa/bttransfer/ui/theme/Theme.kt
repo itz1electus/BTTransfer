@@ -6,6 +6,7 @@ import androidx.compose.material.Shapes
 import androidx.compose.material.darkColors
 import androidx.compose.material.lightColors
 import androidx.compose.runtime.Composable
+import com.mufasa.bttransfer.ui.theme.Purple500
 
 private val DarkColorPalette = darkColors(
     primary = Purple200,
