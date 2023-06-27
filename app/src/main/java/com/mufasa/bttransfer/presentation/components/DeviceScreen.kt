@@ -23,13 +23,21 @@ import com.mufasa.bttransfer.presentation.BluetoothUiState
 fun DeviceScreen(
     state: BluetoothUiState,
     onStartScan: () -> Unit,
-    onStopScan: () -> Unit
+    onStopScan: () -> Unit,
+    onStartServer: () -> Unit,
+    onDeviceClick: (BluetoothDevice) -> Unit,
 ) {
     Column(
         modifier = Modifier
             .fillMaxSize()
     ) {
-        BluetoothDeviceList(state.pairedDevices, state.scannedDevices, {}, Modifier.fillMaxWidth().weight(1f))
+        BluetoothDeviceList(
+            state.pairedDevices,
+            state.scannedDevices,
+            onDeviceClick,
+            Modifier
+                .fillMaxWidth()
+                .weight(1f))
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceAround
@@ -39,6 +47,9 @@ fun DeviceScreen(
             }
             Button(onClick = onStopScan) {
                 Text(text = "Stop Scan")
+            }
+            Button(onClick = onStartServer) {
+                Text(text = "Start server")
             }
         }
     }
