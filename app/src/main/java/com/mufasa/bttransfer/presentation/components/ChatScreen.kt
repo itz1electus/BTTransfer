@@ -2,7 +2,9 @@
 
 package com.mufasa.bttransfer.presentation.components
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -46,7 +48,8 @@ fun ChatScreen(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(16.dp)
+                .padding(16.dp),
+            verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
                 text = "Messages",
@@ -62,7 +65,9 @@ fun ChatScreen(
         LazyColumn(
             modifier = Modifier
                 .fillMaxWidth()
-                .weight(1f)
+                .weight(1f),
+            contentPadding = PaddingValues(16.dp),
+            verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             items(state.messages) { message ->
                 Column(
@@ -95,6 +100,7 @@ fun ChatScreen(
             IconButton(
                 onClick = {
                     onSendMessage(message.value)
+                    message.value = ""
                     keyboardController?.hide()
                 }
             ) {
