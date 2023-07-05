@@ -58,7 +58,7 @@ class BluetoothViewModel @Inject constructor(
             .listen()
     }
 
-    fun disconnectFromDevice(device: BluetoothDeviceDomain) {
+    fun disconnectFromDevice() {
         deviceConnectionJob?.cancel()
         bluetoothController.closeConnection()
         _state.update { it.copy(

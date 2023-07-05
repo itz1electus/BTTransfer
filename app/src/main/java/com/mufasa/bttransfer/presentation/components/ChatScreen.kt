@@ -24,7 +24,9 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.unit.dp
+import com.mufasa.bttransfer.domain.chat.BluetoothDeviceDomain
 import com.mufasa.bttransfer.presentation.BluetoothUiState
+import kotlin.reflect.KFunction1
 
 @Composable
 fun ChatScreen(
@@ -91,7 +93,10 @@ fun ChatScreen(
                 }
             )
             IconButton(
-                onClick = { onSendMessage(message.value) }
+                onClick = {
+                    onSendMessage(message.value)
+                    keyboardController?.hide()
+                }
             ) {
                 Icon(
                     imageVector = Icons.Default.Send,
